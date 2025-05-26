@@ -96,6 +96,8 @@
 
 //Version 2 : efficient extracting mcqs while getting final links
 const puppeteer = require('puppeteer');
+
+
 const pool = require('../db');
 
 async function getAssignmentLinks(courseUrl) {
