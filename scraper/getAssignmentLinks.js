@@ -101,7 +101,10 @@ const puppeteer = require('puppeteer');
 const pool = require('../db');
 
 async function getAssignmentLinks(courseUrl) {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ 
+    headless: true,
+    executablePath: '/usr/bin/google-chrome',
+    args: ['--no-sandbox', '--disable-setuid-sandbox'], });
   const page = await browser.newPage();
 
   await page.goto(courseUrl);
