@@ -106,7 +106,20 @@ async function getAssignmentLinks(courseUrl) {
     executablePath: '/usr/bin/google-chrome',
     args: ['--no-sandbox', '--disable-setuid-sandbox'], });
   const page = await browser.newPage();
-
+  try {
+    await page.goto(courseUrl, { waitUntil: 'networkidle2' });
+    console.log('Please log in manually... You have 60 seconds.');
+    await new Promise(res => setTimeout(res, 60000));
+  } catch (err) {
+    console.error("❌ Failed to load course page:", err.message);
+    return { courseName: 'Unknown', assignmentLinks: [] };
+  }
+  try {
+    await page.waitForSelector('#gcb-nav-left', { timeout: 30000 });
+  } catch (err) {
+    console.error(" Selector '#gcb-nav-left' not found — page may not have loaded correctly.");
+    return { courseName: 'Unknown', assignmentLinks: [] };
+  }
   await page.goto(courseUrl);
   console.log('Please log in manually... You have 60 seconds.');
   await new Promise(res => setTimeout(res, 60000));
